@@ -1,0 +1,20 @@
+PYTHON = /usr/include/python2.6
+
+BOOST_INC = /usr/include
+BOOST_LIB = /usr/lib
+LIBS=/usr/local/lib/
+
+TARGET = moxa
+
+$(TARGET).so: $(TARGET).o
+	g++ -shared -Wl,--export-dynamic \
+	$(TARGET).o -L$(BOOST_LIB) -lboost_python \
+	-L/usr/lib/python2.6/config -lpython2.6 \
+	-o $(TARGET).so
+	sudo cp $(TARGET).so /usr/lib/python2.6/lib-dynload/
+
+$(TARGET).o: $(TARGET).cpp
+	g++ -I$(PYTHON) -I$(BOOST_INC) -c -fPIC $(TARGET).cpp
+
+clean:
+	rm *.o
